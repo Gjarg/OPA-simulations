@@ -1,19 +1,17 @@
 from lib_opa import *
-from lib_opa.calculation import allComponents
+from lib_opa.calculation import allComponents, get_indices
 import matplotlib.pyplot as plt
 # https://whimsical.com/XSrhVZ1abs7SHSRh2UMVdg
 
-
 def main():
-
     print('New ------------------------------------------\n')
     # Convention idler - signal --> pump
     OPA1 = Opa('eee')
+    OPA1.set_polar
     F1 = (Framework(dt=4e-15,
                     T=2e-12,
                     dr=25e-6,
                     R=1125e-6))
-
     Pump = (Pulse(lambda_c=1.03e-6,
                   duration=150e-15,
                   beta2=0_000e-30,
@@ -29,21 +27,11 @@ def main():
                     radius=600e-6,
                     Framework=F1))
 
-
     Signal.pulse_duration()
     Pump.pulse_duration()
     Ppln=Crystal('PPLN', 0)
 
-    # a = Pump.refrac(Pump.lp_mic)
-    # print(ss.n_val((Pump.lp,'nx'))(Pump.lp,'nx'))
-    # b = map(Pump.refrac,Pump.lp_mic)
-    # print(np.array(list(b)))
     print('\n------------\n')
-
-
-    # plt.plot(Pump.lp,b)
-    # plt.xlim(1000e-9,1200e-9)
-    # plt.show()
     print(OPA1)
     print(OPA1.SYSTEM)
     OPA1.add_component(F1,"OpaFramework")
@@ -52,8 +40,11 @@ def main():
     OPA1.add_component(Ppln, "OpaCrystal")
     #print(OPA1.SYSTEM)
     allComponents(OPA1)
-    #print(OPA1.SYSTEM)
+    print(OPA1.SYSTEM.keys())
     print("--" * 20 + "Test to check" + "--" * 20)
+    #print(OPA1.SYSTEM['PumpBeam'].lp_mic)
+    get_indices(OPA1)
+
     print('End ------------')
 
 if __name__ == "__main__":

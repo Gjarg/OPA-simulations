@@ -3,7 +3,6 @@ import sys
 class Opa:
 
     SYSTEM = {}
-
     def __init__(self, Opa_PM):
         self.Opa_PM = Opa_PM
 

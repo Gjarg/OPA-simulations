@@ -1,4 +1,5 @@
 from lib_opa import *
+from lib_opa.new_refrac import get_material
 import numpy as np
 def all_pulses(OPA):
     lp = OPA.SYSTEM['PumpBeam'].lambda_c
@@ -34,11 +35,15 @@ def all_pulses(OPA):
                    Framework=F1))
     return Idler, Pump_2, Signal_2, Idler_2
 
-
 def allComponents(OPA):
-
     Idler, Pump_2, Signal_2, Idler_2 = all_pulses(OPA)
     OPA.add_component(Idler, "IdlerBeam")
     OPA.add_component(Pump_2, "PumpBeam_2")
     OPA.add_component(Signal_2, "SignalBeam_2")
     OPA.add_component(Idler_2, "IdlerBeam_2")
+
+def get_indices(OPA):
+    print('Voici les indices de refraction')
+    crystal = get_material(OPA.SYSTEM['OpaCrystal'].name)
+    n_p = crystal.n(OPA.SYSTEM['PumpBeam'].lp, T=140)
+    print(n_p)

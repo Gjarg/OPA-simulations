@@ -3,7 +3,6 @@ import math
 from scipy.constants import c, epsilon_0
 from lib_opa.framework import Framework
 
-
 class Pulse:
 
     def __init__(self, lambda_c, duration, beta2, delay, energy, radius, Framework):
@@ -29,7 +28,7 @@ class Pulse:
     @property
     def lp(self):
         return 2*np.pi*c/(self.wc+self.w)
- #       return np.nan_to_num(self.wc + f.w, copy= False , nan = 1)
+    #return np.nan_to_num(self.wc + f.w, copy= False , nan = 1)
 
     @property
     def lp_mic(self):

@@ -6,7 +6,7 @@ from lib_opa.crystal import Crystal
 
 class Refractive:
     def __init__(self, Pulse, Opa, Crystal):
-        self.l_mic = Pulse.l_mic
+        self.l_mic = Pulse.lp_mic
         self.pump_polar = Opa.pump_polar
         self.signal_polar = Opa.signal_polar
         self.idler_polar = Opa.idler_polar
@@ -17,4 +17,4 @@ class Refractive:
         return np.sqrt(self.n_2)
 
     def ne_theta(self, no, ne, theta):
-        return 1/np.sqrt(np.sin(theta)**2/ne**2 + np.cos(theta)**2/no**2)
+        return 1 / np.sqrt(np.sin(theta) ** 2 / ne ** 2 + np.cos(theta) ** 2 / no ** 2)
