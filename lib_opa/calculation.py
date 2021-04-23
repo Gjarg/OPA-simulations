@@ -46,4 +46,5 @@ def get_indices(OPA):
     print('Voici les indices de refraction')
     crystal = get_material(OPA.SYSTEM['OpaCrystal'].name)
     n_p = crystal.n(OPA.SYSTEM['PumpBeam'].lp, T=140)
-    print(n_p)
+    betap = crystal.beta(n=n_p, omega_center=OPA.SYSTEM['PumpBeam'].wc, omega_range=OPA.SYSTEM['OpaFramework'].w);
+    print(betap)

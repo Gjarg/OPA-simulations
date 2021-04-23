@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 import numpy as np
+from scipy.constants import c
 
 
 class Refractivee(ABC):
@@ -9,6 +10,10 @@ class Refractivee(ABC):
     @abstractmethod
     def n(cls, wavelength_mic, **kwargs):
         "index of refraction, !!wavelength in microns!!"
+    @classmethod
+    @abstractmethod
+    def beta(cls, omega_center, omega_range, n):
+        "return beta, omega_range corresponds to the range in Framework"
 
 
 class Qpm(Refractivee, ABC):
@@ -20,6 +25,9 @@ class Qpm(Refractivee, ABC):
     @classmethod
     def n(cls, wavelength, T=None):
         return np.sqrt(cls.n_2(wavelength, T))
+    @classmethod
+    def beta(cls, omega_center, omega_range,n):
+        return (omega_range+omega_center)*n/c
 
 
 class PPLN(Qpm):
