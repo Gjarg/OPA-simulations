@@ -32,20 +32,32 @@ def main():
     Ppln=Crystal('PPLN', 0)
 
     print('\n------------\n')
-    print(OPA1)
-    print(OPA1.SYSTEM)
     OPA1.add_component(F1,"OpaFramework")
     OPA1.add_component(Pump, "PumpBeam")
     OPA1.add_component(Signal, "SignalBeam")
     OPA1.add_component(Ppln, "OpaCrystal")
-    #print(OPA1.SYSTEM)
-    allComponents(OPA1)
-    print(OPA1.SYSTEM.keys())
-    print("--" * 20 + "Test to check" + "--" * 20)
-    #print(OPA1.SYSTEM['PumpBeam'].lp_mic)
-    get_indices(OPA1)
 
+    print("--" * 20 + "Test to check" + "--" * 20)
+    #get_indices(OPA1)
+    allComponents(OPA1)
+    get_indices(OPA1)
     print('End ------------')
+    print("--" * 20 + "Check BBO" + "--" * 20)
+    OPA2 = Opa('ooe')
+    BBO = Crystal('BBO', 23.4)
+    OPA2.add_component(BBO, "OpaCrystal")
+    # allComponents(OPA2)
+    ### juste pour le dev##
+    from lib_opa.new_refrac import get_material
+    from lib_opa.calculation import generate_indices
+    # bbo_crystal = get_material(OPA2.SYSTEM['OpaCrystal'].name)
+    # BBO_no = bbo_crystal.nx(OPA2.SYSTEM['PumpBeam'].lp, T=None)
+    # BBO_ne_theta = bbo_crystal.n_theta(
+    #     OPA2.SYSTEM['PumpBeam'].lp, theta=OPA2.SYSTEM['OpaCrystal'].angle, T=None)
+    # print(BBO_no[0:15], '\n', BBO_ne_theta[0:15])
+    # print(OPA2.SYSTEM['OpaCrystal'].angle)
+    generate_indices(OPA2)
+    generate_indices(OPA1)
 
 if __name__ == "__main__":
     main()
