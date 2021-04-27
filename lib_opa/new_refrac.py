@@ -27,9 +27,11 @@ class Qpm(Refractivee, ABC):
     @classmethod
     def n(cls, wavelength, T=None):
         return np.sqrt(cls.n_2(wavelength, T))
+
     @classmethod
-    def beta(cls, omega_center, omega_range,n):
+    def beta(cls, omega_center, omega_range, n):
         return (omega_range + omega_center) * n / c
+
 
 class PPLN(Qpm):
     def n_2(lin, T=None):
@@ -38,6 +40,7 @@ class PPLN(Qpm):
         F = (T-24.5)*(T+570.82)
 
         return 5.756 + 2.86*1e-6 * F + (0.0983+4.7*1e-8*F)/(l**2-(0.202+6.113*1e-8*F)**2) + (189.32+1.516*1e-4*F)/(l**2-12.52**2)-1.32*1e-2*l**2
+
 
 class Uniaxial(Refractivee, ABC):
     @staticmethod
@@ -52,15 +55,20 @@ class Uniaxial(Refractivee, ABC):
     @classmethod
     def nz(cls, wavelength, T=None):
         return np.sqrt(cls.nz_2(wavelength, T))
+
     @classmethod
     def nx(cls, wavelength, T=None):
-        return np.sqrt(cls.nx_2(wavelength,T))
+        return np.sqrt(cls.nx_2(wavelength, T))
 
     @classmethod
     def n_theta(cls, wavelength, theta=None, T=None):
         nx = cls.nx(wavelength, T)
         nz = cls.nz(wavelength, T)
-        return 1/np.sqrt(np.cos(theta)**2/nx**2+np.sin(theta)**2/nz**2)
+        return 1 / np.sqrt(np.cos(theta) ** 2 / nx ** 2 + np.sin(theta) ** 2 / nz ** 2)
+
+    @classmethod
+    def beta(cls, omega_center, omega_range, n):
+        return (omega_range + omega_center) * n / c
 
 
 class BBO(Uniaxial):
@@ -72,6 +80,7 @@ class BBO(Uniaxial):
     def nx_2(lin, T=None):
         x = lin*1e6
         return 1+(0.90291*x**2/(x**2-0.003926))+(0.83155*x**2/(x**2-0.018786))+(0.76536*x**2/(x**2-60.01))
+
     def nz_2(lin, T=None):
         x = lin*1e6
         return 1+(1.151075*x**2/(x**2-0.007142))+(0.21803*x**2/(x**2-0.02259))+(0.656*x**2/(x**2-263))
@@ -92,7 +101,6 @@ class BBO(Uniaxial):
 
 #         raise Exception(
 #             "The input is incorrect, ax must be equal to 'e' or 'o'")
-
 
 
 material_dict = {}
