@@ -50,7 +50,7 @@ class Uniaxial(Refractivee, ABC):
     @staticmethod
     @abstractmethod
     def nz_2(x, T=None):
-        "refractive index along x axis"
+        "refractive index along z axis"
 
     @classmethod
     def nz(cls, wavelength, T=None):
@@ -71,6 +71,58 @@ class Uniaxial(Refractivee, ABC):
         return (omega_range + omega_center) * n / c
 
 
+class Biaxial(Refractivee, ABC):
+    @staticmethod
+    @abstractmethod
+    def nz_2(x, T=None):
+        "refractive index along z axis"
+
+    @staticmethod
+    @abstractmethod
+    def ny_2(x, T=None):
+        "refractive index along y axis"
+
+    @staticmethod
+    @abstractmethod
+    def nx_2(x, T=None):
+        "refractive index along x axis"
+
+    @classmethod
+    def nz(cls, wavelength, T=None):
+        return np.sqrt(cls.nz_2(wavelength, T))
+
+    @classmethod
+    def ny(cls, wavelength, T=None):
+        return np.sqrt(cls.ny_2(wavelength, T))
+
+    @classmethod
+    def nx(cls, wavelength, T=None):
+        return np.sqrt(cls.nx_2(wavelength, T))
+
+    @classmethod
+    def n_angle(cls, wavelength, theta=None, phi=None, T=None):
+
+        if theta == 90:
+            #I have to check
+            nx = cls.nx(wavelength, T)
+            nz = cls.nz(wavelength, T)
+            return 1 / np.sqrt(np.cos(theta) ** 2 / nx ** 2 + np.sin(theta) ** 2 / nz ** 2)
+        elif phi == 90:
+            ## this one is good
+            nx = cls.nx(wavelength, T)
+            nz = cls.nz(wavelength, T)
+            return 1 / np.sqrt(np.cos(theta) ** 2 / nx ** 2 + np.sin(theta) ** 2 / nz ** 2)
+        else:
+            print("Theta or phi should be equal to 90")
+
+
+
+
+    @classmethod
+    def beta(cls, omega_center, omega_range, n):
+        return (omega_range + omega_center) * n / c
+
+
 class BBO(Uniaxial):
     '''Tamošauskas, G., Beresnevičius, G., Gadonas, D., & Dubietis, A. (2018).
     Transmittance and phase matching of BBO crystal in the 3−5 μm range and its
@@ -85,22 +137,16 @@ class BBO(Uniaxial):
         x = lin*1e6
         return 1+(1.151075*x**2/(x**2-0.007142))+(0.21803*x**2/(x**2-0.02259))+(0.656*x**2/(x**2-263))
 
-# def n_BBO(lin, ax=None):
 
-#     l = lin*1e6
+class NL(Uniaxial):
 
-#     if ax == 'e':
+    def nx_2(lin, T=None):
+        x = lin*1e6
+        return np.sqrt(4.9048 - 0.11768/(0.04750-x**2)-0.027169*x**2)
 
-#         return np.sqrt(2.3730 + 0.0128 / (l**2 - 0.0156) - 0.0044 * l**2)
-
-#     elif ax == 'o':
-
-#         return np.sqrt(2.7405 + 0.0184 / (l**2 - 0.0179) - 0.0155 * l**2)
-
-#     else:
-
-#         raise Exception(
-#             "The input is incorrect, ax must be equal to 'e' or 'o'")
+    def nz_2(lin, T=None):
+        x = lin * 1e6
+        return np.sqrt(4.5820-0.099169/(0.044432-x**2)-0.021950*x**2)
 
 
 material_dict = {}

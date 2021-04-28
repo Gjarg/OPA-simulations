@@ -29,15 +29,15 @@ class Pulse:
     @property
     def lp(self):
         tab = 2 * np.pi * c / (self.wc + self.w)
-        # r = []
-        # for i in tab:
-        #     if i < 0:
-        #         r.append(0)
-        #     else:
-        #         r.append(i)
-        # del(tab)
-        # return r
-        return tab
+        r = list()
+        for i in tab:
+            if i < 0:
+                r.append(0)
+            else:
+                r.append(i)
+        del(tab)
+        return np.array(r)
+#        return tab
 
     # return np.nan_to_num(self.wc + f.w, copy= False , nan = 1)
 

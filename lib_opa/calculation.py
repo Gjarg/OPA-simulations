@@ -48,8 +48,6 @@ def allComponents(OPA):
 
 def generate_indices(OPA):
     crystal = get_material(OPA.SYSTEM['OpaCrystal'].name)
-    #print(crycry.__bases__[0], 'to check avant')
-    # dev
     if crystal.__bases__[0] == material_info_dict['BBO'].__bases__[0]:
         print('c est uniaxe')
         get_indices_uniaxe(OPA, crystal)
@@ -62,23 +60,42 @@ def generate_indices(OPA):
 
 def get_indices_uniaxe(OPA, crystal):
     print('Voici les indices de refraction pour uni')
-    #crystal = get_material(OPA.SYSTEM['OpaCrystal'].name)
-    # n_p = crystal.nx(OPA.SYSTEM['PumpBeam'].lp)
-    # print(n_p[0:15])
-    # n_s = crystal.n_theta(
-    #     OPA.SYSTEM['SignalBeam'].lp, OPA.SYSTEM['OpaCrystal'].angle)
-    # print(n_s[0:15])
-    n_i, n_s, n_p = get_indice_name_uni(crystal,OPA )
-    print(n_s)#[0:15])
-    print(n_p)#[0:15])
-    print(n_i)#[0:15])
-    # betap = crystal.beta(
-    #    n=n_p, omega_center=OPA.SYSTEM['PumpBeam'].wc, omega_range=OPA.SYSTEM['OpaFramework'].w)
-    # print(betap[0:15])
+    n_i, n_s, n_p = get_indice_name_uni(crystal, OPA)
+    print(n_s)  # [0:15])
+    print(n_p)  # [0:15])
+    print(np.nan_to_num(n_i, nan=0))  # [0:15])
+    beta_i, beta_s, beta_p = get_beta(crystal, OPA, np.nan_to_num(
+        n_i, nan=0), np.nan_to_num(n_s, nan=0), np.nan_to_num(n_p, nan=0))
+    beta1_i, beta1_s, beta1_p = get_beta1(OPA, beta_i, beta_s, beta_p)
+    vg0i, vg0s, vg0p = get_velocity(beta1_i, beta1_s, beta1_p, OPA)
+    print(np.round(vg0p*100/c, 2), np.round(vg0s*100/c, 2), np.round(vg0i*100/c, 2))
+
+def get_velocity(beta1_i, beta1_s, beta1_p, OPA):
+    vg0i = 1/beta1_i[int(OPA.SYSTEM['OpaFramework'].nt/2)]
+    vg0s = 1/beta1_s[int(OPA.SYSTEM['OpaFramework'].nt/2)]
+    vg0p = 1/beta1_p[int(OPA.SYSTEM['OpaFramework'].nt/2)]
+    return vg0i, vg0s, vg0p
+
+
+def get_beta1(OPA, beta_i, beta_s, beta_p):
+    beta1_i = np.gradient(beta_i, OPA.SYSTEM['OpaFramework'].w)
+    beta1_s = np.gradient(beta_s, OPA.SYSTEM['OpaFramework'].w)
+    beta1_p = np.gradient(beta_p, OPA.SYSTEM['OpaFramework'].w)
+    return beta1_i, beta1_s, beta1_p
+
+
+def get_beta(crystal, OPA, n_i, n_s, n_p):
+    beta_i = crystal.beta(
+        n=n_i, omega_center=OPA.SYSTEM['IdlerBeam'].wc, omega_range=OPA.SYSTEM['OpaFramework'].w)
+    beta_s = crystal.beta(
+        n=n_s, omega_center=OPA.SYSTEM['SignalBeam'].wc, omega_range=OPA.SYSTEM['OpaFramework'].w)
+    beta_p = crystal.beta(
+        n=n_p, omega_center=OPA.SYSTEM['PumpBeam'].wc, omega_range=OPA.SYSTEM['OpaFramework'].w)
+    return beta_i, beta_s, beta_p
 
 
 def get_indice_name_uni(crystal, OPA):
-    n = [0,0,0]
+    n = [0, 0, 0]
     if OPA.Opa_PM[0] == 'e':
         # idler refractive index
         n[0] = crystal.n_theta(OPA.SYSTEM['IdlerBeam'].lp,

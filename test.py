@@ -10,5 +10,4 @@ for i in e:
 
 print(e)
 del (e)
-print(e)
 print(r)

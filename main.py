@@ -12,14 +12,14 @@ def main():
                     T=2e-12,
                     dr=25e-6,
                     R=1125e-6))
-    Pump = (Pulse(lambda_c=1.03e-6,
+    Pump = (Pulse(lambda_c=0.515e-6,
                   duration=150e-15,
                   beta2=0_000e-30,
                   delay=0,
                   energy=125e-6,
                   radius=600e-6,
                   Framework=F1))
-    Signal = (Pulse(lambda_c=1.750e-6,
+    Signal = (Pulse(lambda_c=1.03e-6,
                     duration=100e-15,
                     beta2=0e-30,
                     delay=0,
@@ -66,12 +66,19 @@ def main():
     OPA2.add_component(Pump, "PumpBeam")
     OPA2.add_component(Signal, "SignalBeam")
     allComponents(OPA2)
-    print(OPA2.SYSTEM == OPA1.SYSTEM)
-    print(OPA2)
+    #print(OPA2.SYSTEM == OPA1.SYSTEM)
+    #print(OPA2)
+    #print(OPA2.SYSTEM['IdlerBeam'].lp)
     #generate_indices(OPA2)
     #generate_indices(OPA1)
-    print(OPA2.Opa_PM[0])
-    print(OPA2.SYSTEM['IdlerBeam'].lp)
+    OPA3 = Opa('ooe')
+    OPA3.set_polar
+    NL = Crystal('NL', 45)
+    OPA3.add_component(NL, "OpaCrystal")
+    OPA3.add_component(F1, "OpaFramework")
+    OPA3.add_component(Pump, "PumpBeam")
+    OPA3.add_component(Signal, "SignalBeam")
+    generate_indices(OPA2)
 
 if __name__ == "__main__":
     main()

@@ -62,11 +62,11 @@ def n_LGS (lin, ax = None):
 def n_NL (lin, ax = None):
 
     l = lin*1e6
-    
+
     if ax == 'e':
 
         return np.sqrt(4.5820-0.099169/(0.044432-l**2)-0.021950*l**2)
-    
+
     elif ax == 'o':
 
         return np.sqrt(4.9048 - 0.11768/(0.04750-l**2)-0.027169*l**2)
@@ -91,7 +91,7 @@ def n_GaSe(lin, ax = None):
     elif ax == 'o':
 
         return np.sqrt(10.6409 + 0.3788 / (l**2 - 0.1232) + 7090.7 / (l**2 - 2216.3))
-        
+
     else:
 
         raise Exception("The input is incorrect, ax must be equal to 'e' or 'o'")
