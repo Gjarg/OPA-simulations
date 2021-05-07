@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 import numpy as np
 from scipy.constants import c
+import sys
 
 
 class Refractivee(ABC):
@@ -100,21 +101,25 @@ class Biaxial(Refractivee, ABC):
         return np.sqrt(cls.nx_2(wavelength, T))
 
     @classmethod
-    def n_angle(cls, wavelength, theta=None, phi=None, T=None):
-
-        if theta == 90:
-            #I have to check
-            nx = cls.nx(wavelength, T)
-            nz = cls.nz(wavelength, T)
-            return 1 / np.sqrt(np.cos(theta) ** 2 / nx ** 2 + np.sin(theta) ** 2 / nz ** 2)
-        elif phi == 90:
-            ## this one is good
-            nx = cls.nx(wavelength, T)
-            nz = cls.nz(wavelength, T)
-            return 1 / np.sqrt(np.cos(theta) ** 2 / nx ** 2 + np.sin(theta) ** 2 / nz ** 2)
-        else:
-            print("Theta or phi should be equal to 90")
-
+    def n_angle(cls, wavelength, theta=None, phi=None, T=None,plan=None):
+        if plan == 'XZ':
+            if phi != 0:
+                print('Phi should be equal to 0 degres')
+                sys.exit()
+            else:
+                return 12
+        if plan == 'XY':
+            if theta != 90:
+                print('Theta should be equal to 90 degres')
+                sys.exit()
+            else:
+                return 12
+        if plan == 'YZ':
+            if phi != 90:
+                print('Phi should be equal to 90 degres')
+                sys.exit()
+            else:
+                return 12
 
 
 
