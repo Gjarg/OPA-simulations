@@ -1,7 +1,8 @@
 from lib_opa import *
-from lib_opa.calculation import allComponents#, get_indices
+from lib_opa.calculation import allComponents  # , get_indices
 import matplotlib.pyplot as plt
 # https://whimsical.com/XSrhVZ1abs7SHSRh2UMVdg
+
 
 def main():
     print('New ------------------------------------------\n')
@@ -29,21 +30,20 @@ def main():
 
     Signal.pulse_duration()
     Pump.pulse_duration()
-    Ppln=Crystal('PPLN', 0)
+    LBO = Crystal('LBO', theta=90, phi=12, plan = 'XY')
 
     print('\n------------\n')
 
-
     print("--" * 20 + "Test to check" + "--" * 20)
-    #get_indices(OPA1)
+    # get_indices(OPA1)
     OPA1 = Opa('eee')
     OPA1.set_polar
-    OPA1.add_component(F1,"OpaFramework")
+    OPA1.add_component(F1, "OpaFramework")
     OPA1.add_component(Pump, "PumpBeam")
     OPA1.add_component(Signal, "SignalBeam")
-    OPA1.add_component(Ppln, "OpaCrystal")
+    OPA1.add_component(LBO, "OpaCrystal")
     allComponents(OPA1)
-    #get_indices(OPA1)
+    # get_indices(OPA1)
     print('End ------------')
     print("--" * 20 + "Check BBO" + "--" * 20)
 
@@ -67,10 +67,10 @@ def main():
     OPA2.add_component(Signal, "SignalBeam")
     allComponents(OPA2)
     #print(OPA2.SYSTEM == OPA1.SYSTEM)
-    #print(OPA2)
-    #print(OPA2.SYSTEM['IdlerBeam'].lp)
-    #generate_indices(OPA2)
-    #generate_indices(OPA1)
+    # print(OPA2)
+    # print(OPA2.SYSTEM['IdlerBeam'].lp)
+    # generate_indices(OPA2)
+    # generate_indices(OPA1)
     OPA3 = Opa('ooe')
     OPA3.set_polar
     NL = Crystal('NL', 45)
@@ -79,6 +79,7 @@ def main():
     OPA3.add_component(Pump, "PumpBeam")
     OPA3.add_component(Signal, "SignalBeam")
     generate_indices(OPA2)
+    generate_indices(OPA1)
 
 if __name__ == "__main__":
     main()

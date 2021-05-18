@@ -10,8 +10,10 @@ class Refractive:
         self.pump_polar = Opa.pump_polar
         self.signal_polar = Opa.signal_polar
         self.idler_polar = Opa.idler_polar
-        self.angle = Crystal.angle
+        self.theta = Crystal.theta
         self.name = Crystal.name
+        self.phi = phi
+        self.plan = plan
 
     def n(self):
         return np.sqrt(self.n_2)

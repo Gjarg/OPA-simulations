@@ -37,10 +37,10 @@ class Qpm(Refractivee, ABC):
 class PPLN(Qpm):
     def n_2(lin, T=None):
 
-        l = lin*1e6
+        x = lin*1e6
         F = (T-24.5)*(T+570.82)
 
-        return 5.756 + 2.86*1e-6 * F + (0.0983+4.7*1e-8*F)/(l**2-(0.202+6.113*1e-8*F)**2) + (189.32+1.516*1e-4*F)/(l**2-12.52**2)-1.32*1e-2*l**2
+        return 5.756 + 2.86*1e-6 * F + (0.0983+4.7*1e-8*F)/(x**2-(0.202+6.113*1e-8*F)**2) + (189.32+1.516*1e-4*F)/(x**2-12.52**2)-1.32*1e-2*x**2
 
 
 class Uniaxial(Refractivee, ABC):
@@ -113,7 +113,7 @@ class Biaxial(Refractivee, ABC):
                 print('Theta should be equal to 90 degres')
                 sys.exit()
             else:
-                return 12
+                return 1/np.sqrt((np.cos(phi)/cls.ny(wavelength))**2+(np.sin(phi)/cls.nx(wavelength))**2)
         if plan == 'YZ':
             if phi != 90:
                 print('Phi should be equal to 90 degres')
@@ -153,10 +153,25 @@ class NL(Uniaxial):
         x = lin * 1e6
         return np.sqrt(4.5820-0.099169/(0.044432-x**2)-0.021950*x**2)
 
+class LBO(Biaxial):
+    '''K. Kato: IEEE J. QE-26, 1173 (1990): Tunable UV Generation to 0.2325 pm in LiB305. doi: 10.1109/3.59655'''
+
+    def nx_2(lin, T=None):
+        x = lin*1e6
+        return 2.4542 + (0.01125 / (x ** 2 - 0.001135)) - 0.01388 * x ** 2
+
+    def ny_2(lin, T=None):
+        x = lin*1e6
+        return 2.5390 + (0.01277 / (x ** 2 - 0.01189)) - 0.01848 * x ** 2
+
+    def nz_2(lin, T=None):
+        x = lin*1e6
+        return 2.5865 + (0.01310/(x**2-0.01223))- 0.01861*x**2
+
 
 material_dict = {}
 material_info_dict = {}
-for i in [Qpm.__subclasses__(), Uniaxial.__subclasses__()]:
+for i in [Qpm.__subclasses__(), Uniaxial.__subclasses__(), Biaxial.__subclasses__()]:
     for cls in i:
         print(cls.__name__)
         material_dict[cls.__name__] = cls
