@@ -70,7 +70,7 @@ def get_indice_name_biaxe(crystal, OPA):
     n = [0, 0, 0]
     print(OPA.SYSTEM['OpaCrystal'].plan)
     if OPA.SYSTEM['OpaCrystal'].plan == 'XY':
-        print('je suis dans le plan et voici l angle phi')
+        print('je suis dans le plan XY **')
         print(OPA.SYSTEM['OpaCrystal'].phi)
         if OPA.Opa_PM[0] == 'e':
             print('je suis bien dans le cas 0 = e')
@@ -100,6 +100,75 @@ def get_indice_name_biaxe(crystal, OPA):
         else:
             n[2] = crystal.nz(OPA.SYSTEM['PumpBeam'].lp)
         return n
+
+    elif OPA.SYSTEM['OpaCrystal'].plan == 'YZ':
+        print('je suis dans le plan YZ**')
+        print(OPA.SYSTEM['OpaCrystal'].phi)
+        if OPA.Opa_PM[0] == 'e':
+            print('je suis bien dans le cas 0 = e')
+            # idler refractive index
+            n[0] = crystal.n_angle(wavelength=OPA.SYSTEM['IdlerBeam'].lp,
+                                   theta=OPA.SYSTEM['OpaCrystal'].theta,
+                                   phi=OPA.SYSTEM['OpaCrystal'].phi,
+                                   plan=OPA.SYSTEM['OpaCrystal'].plan)
+        else:
+            n[0] = crystal.nx(OPA.SYSTEM['IdlerBeam'].lp)
+
+        if OPA.Opa_PM[1] == 'e':
+            # signal refractive index
+            n[1] = crystal.n_angle(OPA.SYSTEM['SignalBeam'].lp,
+                                   theta=OPA.SYSTEM['OpaCrystal'].theta,
+                                   phi=OPA.SYSTEM['OpaCrystal'].phi,
+                                   plan=OPA.SYSTEM['OpaCrystal'].plan)
+        else:
+            n[1] = crystal.nx(OPA.SYSTEM['SignalBeam'].lp)
+
+        if OPA.Opa_PM[2] == 'e':
+            # pump refractive index
+            n[2] = crystal.n_angle(OPA.SYSTEM['PumpBeam'].lp,
+                                   theta=OPA.SYSTEM['OpaCrystal'].theta,
+                                   phi=OPA.SYSTEM['OpaCrystal'].phi,
+                                   plan=OPA.SYSTEM['OpaCrystal'].plan)
+        else:
+            n[2] = crystal.nx(OPA.SYSTEM['PumpBeam'].lp)
+        return n
+
+
+    elif OPA.SYSTEM['OpaCrystal'].plan == 'XZ':
+        print('je suis dans le plan XZ**')
+        print(OPA.SYSTEM['OpaCrystal'].phi)
+        print(crystal.VZ2)
+        if OPA.Opa_PM[0] == 'e':
+            print('je suis bien dans le cas 0 = e')
+            # idler refractive index
+            n[0] = crystal.n_angle(wavelength=OPA.SYSTEM['IdlerBeam'].lp,
+                                   theta=OPA.SYSTEM['OpaCrystal'].theta,
+                                   phi=OPA.SYSTEM['OpaCrystal'].phi,
+                                   plan=OPA.SYSTEM['OpaCrystal'].plan)
+        else:
+            n[0] = crystal.ny(OPA.SYSTEM['IdlerBeam'].lp)
+
+        if OPA.Opa_PM[1] == 'e':
+            # signal refractive index
+            n[1] = crystal.n_angle(OPA.SYSTEM['SignalBeam'].lp,
+                                   theta=OPA.SYSTEM['OpaCrystal'].theta,
+                                   phi=OPA.SYSTEM['OpaCrystal'].phi,
+                                   plan=OPA.SYSTEM['OpaCrystal'].plan)
+        else:
+            n[1] = crystal.ny(OPA.SYSTEM['SignalBeam'].lp)
+
+        if OPA.Opa_PM[2] == 'e':
+            # pump refractive index
+            n[2] = crystal.n_angle(OPA.SYSTEM['PumpBeam'].lp,
+                                   theta=OPA.SYSTEM['OpaCrystal'].theta,
+                                   phi=OPA.SYSTEM['OpaCrystal'].phi,
+                                   plan=OPA.SYSTEM['OpaCrystal'].plan)
+        else:
+            n[2] = crystal.ny(OPA.SYSTEM['PumpBeam'].lp)
+        return n
+
+
+
 
 def get_indices_uniaxe(OPA, crystal):
     print('Voici les indices de refraction pour uni')

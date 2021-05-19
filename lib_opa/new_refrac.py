@@ -107,7 +107,7 @@ class Biaxial(Refractivee, ABC):
                 print('Phi should be equal to 0 degres')
                 sys.exit()
             else:
-                return 12
+                return 1 / np.sqrt((np.cos(phi) / cls.nx(wavelength)) ** 2 + (np.sin(phi) / cls.nz(wavelength)) ** 2)  #a changer
         if plan == 'XY':
             if theta != 90:
                 print('Theta should be equal to 90 degres')
@@ -119,9 +119,7 @@ class Biaxial(Refractivee, ABC):
                 print('Phi should be equal to 90 degres')
                 sys.exit()
             else:
-                return 12
-
-
+                return 1/np.sqrt((np.cos(phi)/cls.ny(wavelength))**2+(np.sin(phi)/cls.nz(wavelength))**2)
 
     @classmethod
     def beta(cls, omega_center, omega_range, n):
@@ -155,6 +153,8 @@ class NL(Uniaxial):
 
 class LBO(Biaxial):
     '''K. Kato: IEEE J. QE-26, 1173 (1990): Tunable UV Generation to 0.2325 pm in LiB305. doi: 10.1109/3.59655'''
+
+    VZ2 = 108.5
 
     def nx_2(lin, T=None):
         x = lin*1e6

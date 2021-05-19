@@ -30,7 +30,7 @@ def main():
 
     Signal.pulse_duration()
     Pump.pulse_duration()
-    LBO = Crystal('LBO', theta=90, phi=12, plan = 'XY')
+    LBO = Crystal('LBO', theta=15, phi=0, plan = 'XZ')
 
     print('\n------------\n')
 
